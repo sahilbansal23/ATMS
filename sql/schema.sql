@@ -44,7 +44,7 @@ CREATE TABLE public.orders
     created_at bigint,
     updated_at bigint,
     status boolean,
-    reamrk character varying,
+    remark character varying,
     PRIMARY KEY (id)
 );
 CREATE TABLE public.order_items

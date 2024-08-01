@@ -1,7 +1,5 @@
 require("dotenv").config();
 const Pool = require("pg-pool");
-const pg = require("pg");
-const { Client } = require("pg");
 
 const pool = new Pool({
   user: process.env.DBUSER,
