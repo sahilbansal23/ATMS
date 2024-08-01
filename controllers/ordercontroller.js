@@ -6,7 +6,7 @@ const logger = require("../utils/logger");
 const { ulid } = require("ulid");
 const { authValidate } = require("../utils/auth");
 const orderQueries = require("../queries/orders");
-const { bookDetails } = require("../queries/books");
+const { bookDetails } = require("../queries/book");
 const { P } = require("pino");
 
 //function to get the list of books
@@ -22,7 +22,7 @@ const orderList = async (req, res) => {
     res.status(200).send({
       status: 200,
       msg: "order list returned Successfully",
-      data: orderList,
+      data: orderList.rows,
     });
   } catch (error) {
     await client.query("ROLLBACK");

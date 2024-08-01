@@ -1,6 +1,7 @@
 const { pool } = require("../config/dbconfig");
 const queriesCart = require("../queries/cart");
 const { get } = require("../routes/authRoutes");
+const { authValidate } = require("../utils/auth");
 const logger = require("../utils/logger");
 const { ulid } = require("ulid");
 
@@ -13,7 +14,7 @@ const getCart = async (req, res) => {
 
     logger.info("Enter into get carts");
 
-    const cartDetails = await client.query(queriesCart.userCart, [user_idƒ]);
+    const cartDetails = await client.query(queriesCart.userCart, [user_id]);
 
     res.status(200).send({
       status: 200,
@@ -37,7 +38,7 @@ const addBook = async (req, res) => {
   try {
     const auth = await authValidate(req.headers, client);
     const user_id = auth.user_id;
-    const { book_id, quantity } = req.body;
+    const { book_id, qty } = req.body;
 
     const getUserCart = await client.query(queriesCart.getcart, [user_id]);
 
@@ -60,7 +61,7 @@ const addBook = async (req, res) => {
       cart_item_id,
       cart_id,
       book_id,
-      quantity,
+      qty,
     ]);
 
     res.status(200).send({
@@ -87,35 +88,16 @@ const deleteCartBook = async (req, res) => {
   try {
     const auth = await authValidate(req.headers, client);
     const user_id = auth.user_id;
-    const book_id = req.params.itemId;
+    const cart_item_id = req.params.itemId;
 
-    let cart_id = "";
-    if (getUserCart.rowCount == 0) {
-      const currentTime = Date.now();
-      cart_id = ulid();
-      const createCart = await client.query(queriesCart.createCart, [
-        cart_id,
-        user_id,
-        currentTime,
-        currentTime,
-      ]);
-    } else {
-      cart_id = getUserCart.rows[0].id;
-    }
-    logger.info("Enter into add book");
-    const cart_item_id = ulid();
-    const insertBook = await client.query(queriesCart.addBok, [
+    const deleteCartItem = await client.query(queriesCart.deleteCartItem, [
       cart_item_id,
-      cart_id,
-      book_id,
-      quantity,
     ]);
-
+    logger.info("cart item removed successfully");
     res.status(200).send({
       status: 200,
-      msg: "Cart item added Successfully",
+      msg: "Cart item Removed Successfully",
       data: {
-        cart_id: cart_id,
         cart_item_id: cart_item_id,
       },
     });
@@ -133,5 +115,5 @@ const deleteCartBook = async (req, res) => {
 module.exports = {
   getCart,
   addBook,
-  deleteCartBook
+  deleteCartBook,
 };

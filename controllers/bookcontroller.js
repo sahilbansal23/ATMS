@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const logger = require("../utils/logger");
 const { ulid } = require("ulid");
 const { authValidate } = require("../utils/auth");
-const bookQueries = require("../queries/books");
+const bookQueries = require("../queries/book");
 
 //function to get the list of books
 const getBooks = async (req, res) => {

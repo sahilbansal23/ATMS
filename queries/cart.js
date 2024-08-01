@@ -1,5 +1,6 @@
 const userCart = `SELECT 
  cart.id as cart_id,
+ ci.id as cart_item_id,
  ci.book_id as book_id,
  ci.quantity as qty,
  bk.title as title,
@@ -21,10 +22,14 @@ const addBok = `INSERT INTO public.cart_items(
 	VALUES ($1, $2, $3, $4);`;
 
 const deleteCartItem = `DELETE FROM public.cart_items
-	WHERE id `
-
+	WHERE id = $1`
+const createCart = `INSERT INTO public.carts(
+	id, user_id, created_at, updated_at)
+	VALUES ($1, $2, $3, $4);`
 module.exports = {
   userCart,
   getcart,
-  addBok
+  addBok,
+  deleteCartItem,
+  createCart
 };
